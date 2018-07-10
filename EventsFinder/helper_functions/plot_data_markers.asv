@@ -78,7 +78,6 @@ temp_marker_values = temp(data_3); %y value corresponding to exact time
 disp('Plotting data subplots');
 title = strcat(name,' Physiological Data'); 
 figure('Name',title)
-RGB = [27/255 0/255 135/255]; %marker color
 
 eda_subplot = subplot(3,1,1);
 %Modify SQI
@@ -88,7 +87,7 @@ hold on
 plot(eda_time_corr,eda,color);
 plot(eda_time_corr,eda_sqi,'color',[153/255 153/255 255/255]);
 if (~isempty(eda_markers)) %insert markers from events app
-    (scatter(eda_marker_times,eda_marker_values,30,RGB,'*')); 
+    (scatter(eda_marker_times,eda_marker_values,'*')); 
 end
 grid on
 hold off
@@ -98,13 +97,14 @@ ylabel('EDA');
 xticks(0:100:2500);
 xtickangle(45);
 
+
 hr_subplot = subplot(3,1,2);
 %Plot HR Subplot
 hold on
 plot(hr_time_corr,hr,color)
 grid on
 if (~isempty(hr_markers)) %insert markers from events app
-    (scatter(hr_marker_times,hr_marker_values,30,RGB,'*'));
+    (scatter(hr_marker_times,hr_marker_values,20,RGB,'*'));
 end 
 hold off
 %Axis Properties
@@ -120,7 +120,7 @@ hold on
 plot(temp_time_corr,temp,color);
 plot(temp_time_corr,temp_sqi,'color',[153/255 153/255 255/255]);
 if (~isempty(temp_markers)) %insert markers from app
-   (scatter(temp_marker_times,temp_marker_values,30,RGB,'*')); 
+   (scatter(temp_marker_times,temp_marker_values,20,'*')); 
 end
 grid on
 hold off
