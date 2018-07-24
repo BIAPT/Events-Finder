@@ -1,8 +1,14 @@
-function [BVP_filt,BVPSCORE,BVPSQI, SC_filt,SCSCORE,SCSQI, TMP_filt, TMPSCORE,TMPSQI] = comp_SQI_3(blood_volume_pulse,skin_conductance,temperature)
+function [bvp_struct, sc_struct,temp_struct] = comp_SQI_3(blood_volume_pulse,skin_conductance,temperature)
 %% function data_in = comp_SQI(data_in)
 % Function used to compute a data quality index for a measurement session
 %                 
 % Input: filename - including path if not in local directory.
+%% Setting up variables
+bvp_struct = struct();
+sc_struct = struct();
+temp_struct = struct();
+
+
 %% 0 - Import BVP Model
 % Clean existing variables in function workspace so it does not affect
 % result consistency
@@ -309,3 +315,15 @@ TMPSCORE=mean_temp_sqi;
 SCSQI = sc_sqi.*weight_sc';
 TMPSQI = temp_sqi.*weight_skt';
 BVPSQI = bvp_sqi_new;
+
+bvp_struct.filt = BVP_filt;
+bvp_struct.score = BVPSCORE;
+bvp_struct.sqi = BVPSQI;
+
+sc_struct.filt = SC_filt;
+sc_struct.score = SCSCORE;
+sc_struct.sqi = SCSQI;
+
+temp_struct.filt = TMP_filt;
+temp_struct.score = TMPSCORE;
+temp_struct.sqi = TMPSQI;
