@@ -1,0 +1,12 @@
+function save_events(app,events,type)
+%SAVE_EVENTS Save the events into the master marker file for the electron app
+%   Input
+%   app:
+%   events:
+%   type
+%   Output:
+%
+outputArg1 = inputArg1;
+outputArg2 = inputArg2;
+end
+
