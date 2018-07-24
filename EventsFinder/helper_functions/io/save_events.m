@@ -15,7 +15,7 @@ function save_events(app,events,type)
     % Individual File
     individual_file_name = app.MarkerFileNameEditField.Value;
     individual_file_name = strcat(individual_file_name,'_',type);
-    individual_file_name = strcat(individual_file_name,".json");
+    individual_file_name = strcat(individual_file_name,'_',num2str(app.time_stamp),".json");
     individual_file_name = strcat(app.saving_directory,'/',individual_file_name);
     individual_fileID = fopen(individual_file_name,'w');
 
