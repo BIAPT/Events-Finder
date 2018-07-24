@@ -1,6 +1,6 @@
 function plot_data_markers(app,name,start_time,eda_time,eda,eda_sqi,hr_time,hr,temp_time,temp,temp_sqi,markers,event_type,color)
 %PLOT_DATA_MARKERS Plot physiological data from Participant and/or
-%Caregiver. Includes Markers as vertical lines and SQI on the top of the
+%Caregiver. Includes Markers as asterisks and SQI on the top of the
 %graph.
 %{
 assignin('base','eda_time',eda_time);
