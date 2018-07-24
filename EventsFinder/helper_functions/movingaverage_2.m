@@ -1,4 +1,4 @@
-function[y] = movingaverage_test(file,windowsize)
+function[y] = movingaverage_2(file,windowsize)
 filteredpoint = 0;
 
 for n = windowsize:length(file)
