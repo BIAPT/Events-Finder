@@ -1,0 +1,14 @@
+function [data_struct_p,data_struct_c] = preprocess(app)
+%PREPROCESS Preprocess the raw data to clean it
+%   Input
+%   app:
+%   
+%   Output:
+%   data_struct_p and data_struct_c: structure containing the cleaned data
+%   for every modality
+
+data_struct_p = struct();
+data_struct_p.bvp_filt
+data_struct_c = struct();
+end
+
