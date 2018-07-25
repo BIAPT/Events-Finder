@@ -1,4 +1,4 @@
-function save_events(app,events,type)
+function save_events(app,event_struct,type)
 %SAVE_EVENTS Save the events into the master marker file for the electron app
 %   Input
 %   app: contain the application public data
@@ -24,31 +24,29 @@ function save_events(app,events,type)
     if(strcmp(type,"p"))
         class = "marker-red";
         fprintf(master_fileID,'[\n'); % if its participant write first [
-        event_type = app.event_type_p;
     else
         class = "marker-blue";
-        event_type = app.event_type_c;
     end
     
     %% Writing
     fprintf(individual_fileID,'[\n');
     % Iterate through the events and write them into the JSON file
-    for i = 1:size(events,1)  
+    for i = 1:size(event_struct.events,1)  
         % Codify Eda,temp,hr into numbers from 1 to 3
-        if(event_type(i) == 1) %Eda
-            mod_type = 1;
-        elseif(event_type(i) == 2)%Hr
-            mod_type = 2;
+        if(event_struct.type(i) == 1) %Eda
+            mod = 1;
+        elseif(event_struct.type(i) == 2)%Hr
+            mod = 2;
         else %Temperature
-            mod_type = 3;
+            mod = 3;
         end
         
-        if(i ~= size(events,1) || strcmp(type,"p"))
-            fprintf(master_fileID,'{"time": %d, "text": "%d", "class": "%s"},\n',events(i),mod_type,class);
-            fprintf(individual_fileID,'{"time": %d, "text": "%d", "class": "%s"},\n',events(i),mod_type,class);
+        if(i ~= size(event_struct.events,1) || strcmp(type,"p"))
+            fprintf(master_fileID,'{"time": %d, "text": "%d", "class": "%s"},\n',event_struct.events(i),mod,class);
+            fprintf(individual_fileID,'{"time": %d, "text": "%d", "class": "%s"},\n',event_struct.events(i),mod,class);
         else
-            fprintf(master_fileID,'{"time": %d, "text": "%d", "class": "%s"}\n',events(i),mod_type,class);
-            fprintf(individual_fileID,'{"time": %d, "text": "%d", "class": "%s"}\n',events(i),mod_type,class);
+            fprintf(master_fileID,'{"time": %d, "text": "%d", "class": "%s"}\n',event_struct.events(i),mod,class);
+            fprintf(individual_fileID,'{"time": %d, "text": "%d", "class": "%s"}\n',event_struct.events(i),mod,class);
         end
     end
 
