@@ -48,7 +48,7 @@ function [data_struct] = preprocess(app)
     
    %% Thresholding (TODO Wait for threshold from florian)
    
-   %% Filtering (TODO use the exponential filter
+   %% Filtering (TODO use the exponential filter)
    
    
 end
