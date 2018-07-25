@@ -1,4 +1,4 @@
-function[y] = expdecay(file,alpha)
+function[y] = exp_decay(file,alpha)
 %Exponential decay smoothing filter
 %increase alpha for more filtering: uses more past data to compute an
 %average

@@ -1,7 +1,8 @@
-function [data_struct] = preprocess(app)
+function [data_struct] = pre_process(app)
 %PREPROCESS Preprocess the raw data to clean it
 %   Input
-%   app:
+%   app: contain the application public data
+%   type: p = participant, c = care-giver
 %   
 %   Output
 %   data_struct: structure containing the cleaned data
