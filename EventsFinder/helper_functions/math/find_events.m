@@ -59,15 +59,13 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     %(EDA) Apply Moving Average Filter
     sc_struct.avg = moving_average(sc_struct.avg,15)';
     
-    %(HR) Apply Moving Average Filter
-    %{
-    hr_struct.avg = movingaverage_2(hr_struct.avg,55)';
+    %Apply Moving Average Filter on HR
+    hr_struct.avg = moving_average(hr_struct.avg,55)';
     hrDelay = (55-1)/2;
     hr_struct.time = hr_struct.time-hrDelay;
-    %}
-    %Cubic spline function
-    p=0.001; %0 to 1, where 0 is maximal smoothing
-    hr_struct.avg = csaps(hr_struct.time,hr_struct.avg,p,hr_struct.time);
+    %(HR) Apply cubic spline function
+    %p=0.001; %0 to 1, where 0 is maximal smoothing
+    %hr_struct.avg = csaps(hr_struct.time,hr_struct.avg,p,hr_struct.time);
     
     %(TEMP) Apply Exponential Decay Filter on Temperature
     temp_struct.avg = exp_decay(temp_struct.avg,0.80);

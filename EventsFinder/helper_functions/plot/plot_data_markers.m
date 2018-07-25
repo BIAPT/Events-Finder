@@ -1,7 +1,29 @@
 function plot_data_markers(name,start_time,hr_raw,eda_time,eda,eda_sqi,hr_time,hr,temp_time,temp,temp_sqi,markers,event_type,color)
-%PLOT_DATA_MARKERS Plot physiological data from Participant and/or
-%Caregiver. Includes Markers as asterisks and SQI on the top of the
-%graph.
+%PLOT_DATA_MARKERS Plot graph of physiological data 
+%   Input
+%   name: 'participant' and/or 'caregiver'
+%   start_time: start time given to the Events Finder GUI
+%   hr_raw: averaged hr 
+%   eda_time: eda time corresponding to averaged eda+smoothing
+%   eda: averaged eda+smoothing
+%   eda_sqi: signal quality index for averaged eda+smoothing
+%   hr_time: hr time corresponding to averaged hr+smoothing
+%   hr: averaged hr+smoothing
+%   temp_time: temperature time corresponding to averaged temp+smoothing
+%   temp: averaged temp+smoothing
+%   temp_sqi: signal quality index for averaged temp+smoothing
+%   markers: times corresponding to markers found by Events Finder
+%   event_type: number corresponding to marker data type. 
+%               where 1-EDA; 2-HR; 3-Temperature
+%   color: 'r' for participant, 'b' for caregiver
+
+%   Output
+%   plot figure: eda sublot, hr subplot, temperature subplot
+%   SQI: drag down to view sqi (purple line) above graph for eda and temp. 
+%       Ranges from n to n+1 where the values closest to n+1 are
+%       greater in signal quality.
+%   markers: orange asterisks
+
 %{
 assignin('base','eda_time',eda_time);
 assignin('base','eda',eda);
@@ -22,10 +44,26 @@ assignin('base','event_type',event_type);
 assignin('base','color',color);
 %}
 %% Selecting Raw Data for Heart Rate Variability Measures
-hr_raw = hr_raw{:,2};
-hr_raw_time = hr_raw{:,1};
+%{
+if(strcmp(name,'Participant'))
+        hr_raw = app.HR_p{:,2};
+    else
+        hr_raw = app.HR_c{:,2};
+    end
+    hr_raw = str2double(hr_raw);
 
-hr_raw = str2double(hr_raw);
+    if(strcmp(name,'Participant'))
+        hr_raw_time = app.HR_p{:,1};
+    else
+        hr_raw_time = app.HR_c{:,1};
+    end
+    hr_raw_time = str2double(hr_raw_time);
+%}
+
+hr_raw_data = hr_raw{:,2};
+hr_raw_data = str2double(hr_raw_data);
+
+hr_raw_time = hr_raw{:,1};
 hr_raw_time = str2double(hr_raw_time);
 
 %% Correct time values
@@ -110,7 +148,7 @@ xtickangle(45);
 hr_subplot = subplot(3,1,2);
 %Plot HR Subplot
 hold on
-plot(hr_raw_time,hr_raw,'color',[210/255 210/255 210/255])
+plot(hr_raw_time,hr_raw_data,'color',[210/255 210/255 210/255])
 plot(hr_time_corr,hr,color)
 grid on
 if (~isempty(hr_markers)) %insert markers from events app
