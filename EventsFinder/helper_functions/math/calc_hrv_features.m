@@ -35,7 +35,7 @@ function [hrv_features_struct] = calc_hrv_features(app,type,window_size)
     end
     hr = str2double(hr);
     RR_intervals = (60./hr); % To get RR in seconds
-    RR_intervals = RR_intervals.*1000 % To get RR in milliseconds
+    RR_intervals = RR_intervals.*1000; % To get RR in milliseconds
     
     %% Feature calculation
     % Using a window to calculate feature vector
