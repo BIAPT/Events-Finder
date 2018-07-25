@@ -1,4 +1,4 @@
-function log_events(app,events)
+function log_events(app,events,type)
 %LOG_EVENTS Create a log file containing all the events find with the
 %thresholds
 %   Input

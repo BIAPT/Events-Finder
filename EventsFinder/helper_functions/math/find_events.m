@@ -30,7 +30,6 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     sc_struct.avg_sqi = [];
 
     %% Creating and Setting Other Variables
-    start_time = app.start_time;
     end_time = get_end_time(app,type);
     win_size = 500;
     
@@ -52,9 +51,9 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     
     %% Average the Signals
     % Get the averaged values for each data type
-    [hr_struct.avg,hr_struct.time,bad_hr_struct.time,~] = get_average(app,type,'hr',win_size,r_start_time,end_time);
-    [temp_struct.avg,temp_struct.time,bad_temp_struct.time,temp_struct.avg_sqi] = get_average(app,type,'temp',win_size,r_start_time,end_time);
-    [sc_struct.avg,sc_struct.time,bad_sc_time,sc_struct.avg_sqi] = get_average(app,type,'eda',win_size,r_start_time,end_time);
+    [hr_struct.avg,hr_struct.time,bad_hr_struct.time,~] = win_average(app,type,'hr',win_size,app.start_time,end_time);
+    [temp_struct.avg,temp_struct.time,bad_temp_struct.time,temp_struct.avg_sqi] = win_average(app,type,'temp',win_size,app.start_time,end_time);
+    [sc_struct.avg,sc_struct.time,bad_sc_time,sc_struct.avg_sqi] = win_average(app,type,'eda',win_size,app.start_time,end_time);
 
     %% Averaging and Filtering
     %(EDA) Apply Moving Average Filter
@@ -71,7 +70,7 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     hr_struct.avg = csaps(hr_struct.time,hr_struct.avg,p,hr_struct.time);
     
     %(TEMP) Apply Exponential Decay Filter on Temperature
-    temp_struct.avg = expdecay(temp_struct.avg,0.80);
+    temp_struct.avg = exp_decay(temp_struct.avg,0.80);
 
     %% Find Bad Time Points
     % Concatenate the bad times for TEMP and EDA and take only the non redondant ones
@@ -104,17 +103,17 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
         hr_change = hr_prom-curr_thresh.hr;
         events.hr.diff = [events.hr.diff; hr_change];
         %Convert time to seconds
-        events.hr.time = (events.hr.time-r_start_time)/1000;
+        events.hr.time = (events.hr.time-app.start_time)/1000;
      end
     
     %% (SC) Events Detection
     if(app.EDACheckBox.Value == 1)
        % An event is tagged if there is a given change in a 10 second interval (default about 0.1 microsemens)
        offset = 10/0.5;
-       for i = 1:(size(eda_struct.time,1)-offset)
-           eda_change = abs(eda_struct.avg(i+offset,1) - eda_struct.avg(i,1)) ;
-           if(eda_change > curr_thresh.eda && ~ismember(eda_struct.time(i,1),bad_time))
-               events.eda.time = [events.eda.time; (eda_struct.time(floor(i+offset/2),1)-r_start_time)/1000];
+       for i = 1:(size(sc_struct.time,1)-offset)
+           eda_change = abs(sc_struct.avg(i+offset,1) - sc_struct.avg(i,1)) ;
+           if(eda_change > curr_thresh.eda && ~ismember(sc_struct.time(i,1),bad_time))
+               events.eda.time = [events.eda.time; (sc_struct.time(floor(i+offset/2),1)-app.start_time)/1000];
                events.eda.diff = [events.eda.diff; eda_change/curr_thresh.eda];
            end
        end
@@ -147,11 +146,11 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
         temp_change = temp_prom-curr_thresh.temp;
         events.temp.diff = [events.temp.diff; temp_change];
         %Convert time to seconds
-        events.temp.time = (events.temp.time-r_start_time)/1000;
+        events.temp.time = (events.temp.time-app.start_time)/1000;
     end
     
     %% Log the All Events
-    log_events(app,events);
+    log_events(app,events,type);
     
     %% Events Filtering
     % Here we select only the most salient events
@@ -199,7 +198,7 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
 %TODO: Refactor the part within the if statements
         if((max_eda >= max_hr) && (max_eda >= max_temp) && max_eda ~= -1)
             % Setting the boundaries
-            curr_eda_time = events.eda.time(ind_eda,1)
+            curr_eda_time = events.eda.time(ind_eda,1);
             lower_bound = curr_eda_time - EDA_win;
             upper_bound = curr_eda_time + EDA_win;
             % Check if there is already an event there
@@ -215,7 +214,7 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
             events.eda.diff(ind_eda,1) = -1;
         elseif((max_hr >= max_eda) && (max_hr >= max_temp) && max_hr ~= -1)
             % Setting the boundaries
-            curr_hr_time = events.hr.time(ind_hr,1)
+            curr_hr_time = events.hr.time(ind_hr,1);
             lower_bound = curr_hr_time - HR_win;
             upper_bound = curr_hr_time + HR_win; 
             % Check if there is already an event there
@@ -231,7 +230,7 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
             events.hr.diff(ind_hr,1) = -1;
         elseif((max_temp >= max_eda) && (max_temp >= max_hr) && max_temp ~= -1)
             % Setting the boundaries
-            curr_temp_time = events.temp.time(ind_temp,1)
+            curr_temp_time = events.temp.time(ind_temp,1);
             lower_bound = curr_temp_time - TEMP_win;
             upper_bound = curr_temp_time + TEMP_win;   
             % Check if there is already an event there
@@ -259,14 +258,6 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     % Create our sort matrix
     sort_matrix = [event_struct.events,event_struct.type];
     sorted_type = sortrows(sort_matrix,1);
-    % Store the matrix (TODO remove this, its in the struct now)
-    if(strcmp(type,'p'))
-        app.event_type_p = sorted_type(:,2);
-        assignin('base','type_p',sorted_type(:,2));
-    elseif(strcmp(type,'c'))
-        app.event_type_c = sorted_type(:,2);
-        assignin('base','type_c',sorted_type(:,2));
-    end
     % Update the data in the structure
     event_struct.events = sort(event_struct.events);
     event_struct.type = sorted_type(:,2);
