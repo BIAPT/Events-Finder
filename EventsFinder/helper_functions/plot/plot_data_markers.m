@@ -148,7 +148,7 @@ xtickangle(45);
 hr_subplot = subplot(3,1,2);
 %Plot HR Subplot
 hold on
-plot(hr_raw_time,hr_raw_data,'color',[210/255 210/255 210/255])
+plot(hr_raw_time,hr_raw_data,'color',[160/255 160/255 160/255])
 plot(hr_time_corr,hr,color)
 grid on
 if (~isempty(hr_markers)) %insert markers from events app
