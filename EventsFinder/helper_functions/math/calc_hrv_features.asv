@@ -27,7 +27,6 @@ function [hrv_features_struct] = calc_hrv_features(app,type,window_size)
     hrv_features_struct.std_succ_diff = [];
     hrv_features_struct.rms_succ_diff = [];
     hrv_features_struct.pRR20 = [];
-    hrv_features_struct.time = [];
     
     %% Selecting Data
     if(strcmp(type,"p"))
@@ -64,8 +63,6 @@ function [hrv_features_struct] = calc_hrv_features(app,type,window_size)
         % Calculate the time corresponding to that window
         start_time = time(i,1);
         end_time = time(i+window_size,1);
-        middle_time = (start_time+end_time)/2;
-        hrv_features_struct.time = [hrv_features_struct.time;floor(middle_time)];
         
         
     end
