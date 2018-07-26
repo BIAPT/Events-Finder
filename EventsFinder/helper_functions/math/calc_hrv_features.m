@@ -38,7 +38,7 @@ function [hrv_features_struct] = calc_hrv_features(app,type,window_size)
         time = app.HR_c{:,1};
     end
     hr = str2double(hr);
-    time = str2num(time);
+    time = str2double(time);
     
     RR_intervals = (60./hr); % To get RR in seconds
     RR_intervals = RR_intervals.*1000; % To get RR in milliseconds
