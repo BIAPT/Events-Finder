@@ -62,7 +62,6 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
         %Alter filter parameters to tune
         a.mincutoff = 100.0;
         a.beta = 4.0;
-    sc_struct.time_clean = (sc_struct.time-app.start_time)/1000;
     noisySignal = sc_struct.avg;
     filteredSignal = zeros(size(noisySignal));
     for i = 1:length(noisySignal)
