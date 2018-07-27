@@ -22,7 +22,7 @@ function plot_data_markers(name,start_time,hr_raw,eda_time,eda,eda_sqi,hr_time,h
 %   SQI: drag down to view sqi (purple line) above graph for eda and temp. 
 %       Ranges from n to n+1 where the values closest to n+1 are
 %       greater in signal quality.
-%   markers: orange asterisks
+%   markers: navy blue asterisks
 
 %{
 assignin('base','eda_time',eda_time);
@@ -120,7 +120,7 @@ for i = 1:length(temp_markers)
 end
 temp_marker_times = temp_time_corr(data_3);
 temp_marker_values = temp(data_3); %y value corresponding to exact time
-                
+
 %% Plot Physiological Data
 disp('Plotting data subplots');
 title = strcat(name,' Physiological Data'); 

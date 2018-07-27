@@ -55,14 +55,15 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     [temp_struct.avg,temp_struct.time,bad_temp_struct.time,temp_struct.avg_sqi] = win_average(app,type,'temp',win_size,app.start_time,end_time);
     [sc_struct.avg,sc_struct.time,bad_sc_time,sc_struct.avg_sqi] = win_average(app,type,'eda',win_size,app.start_time,end_time);
 
-    %% Averaging and Filtering
-    %(EDA) Apply Moving Average Filter
-    sc_struct.avg = moving_average(sc_struct.avg,15)';
-    %(HR) Apply Cubic Smoothing Spline Function
+    %% Filtering the Signals
+    %(EDA) Apply Exponential Decay filter
+    %sc_struct.avg = moving_average(sc_struct.avg,15)';
+    sc_struct.avg = exp_decay(sc_struct.avg,0.25);
+    %(HR) Apply Cubic Smoothing Spline function
     p = 0.001;
     hr_struct.time_clean = (hr_struct.time-app.start_time)/1000;
     hr_struct.avg = csaps(hr_struct.time_clean,hr_struct.avg,p,hr_struct.time_clean); 
-    %(TEMP) Apply Exponential Decay Filter on Temperature
+    %(TEMP) Apply Exponential Decay filter
     temp_struct.avg = exp_decay(temp_struct.avg,0.80);
 
     %% Find Bad Time Points

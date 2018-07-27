@@ -66,7 +66,7 @@ function [hrv_features_struct] = calc_hrv_features(app,type,window_size)
         end_time = time(i+window_size,1);
         middle_time = (start_time+end_time)/2;
         hrv_features_struct.time = [hrv_features_struct.time;floor(middle_time)];
-        
+        hrv_features_struct.time_corr = (hrv_features_struct.time-app.start_time)/1000;
         
     end
 
