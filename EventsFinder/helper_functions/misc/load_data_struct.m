@@ -24,20 +24,5 @@ function load_data_struct(app)
     app.Data.c.temp.systime = str2double(app.TEMP_c{:,1});
     app.Data.p.temp.raw = str2double(app.TEMP_p{:,2});
     app.Data.c.temp.raw = str2double(app.TEMP_c{:,2});
-    
-    %% Calculate the correct time in seconds
-    % BVP
-    app.Data.p.bvp.corr_time = (app.Data.p.bvp.systime - app.start_time)/1000;
-    app.Data.c.bvp.corr_time = (app.Data.c.bvp.systime - app.start_time)/1000;
-    % HR
-    app.Data.p.hr.corr_time = (app.Data.p.hr.systime - app.start_time)/1000;
-    app.Data.c.hr.corr_time = (app.Data.c.hr.systime - app.start_time)/1000;
-    % SC
-    app.Data.p.sc.corr_time = (app.Data.p.sc.systime - app.start_time)/1000;
-    app.Data.c.sc.corr_time = (app.Data.c.sc.systime - app.start_time)/1000;    
-    % TEMP
-    app.Data.p.temp.corr_time = (app.Data.p.temp.systime - app.start_time)/1000;
-    app.Data.c.temp.corr_time = (app.Data.c.temp.systime - app.start_time)/1000;
-    
 end
 
