@@ -154,8 +154,9 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     end
     
     %% Log the All Events
-    log_events(app,events,type);
-    
+    if(app.is_debug == 0)
+        log_events(app,events,type);
+    end
     %% Events Filtering
     % Here we select only the most salient events
     % The number of markers are given by app.NumberofMarkersEditField.Value
