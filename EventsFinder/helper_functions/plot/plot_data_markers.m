@@ -24,7 +24,7 @@ function plot_data_markers(name,start_time,hr_raw,eda_time,eda,eda_sqi,hr_time,h
 %       greater in signal quality.
 %   markers: navy blue asterisks
 
-%{
+
 assignin('base','eda_time',eda_time);
 assignin('base','eda',eda);
 assignin('base','eda_sqi',eda_sqi);
@@ -42,7 +42,7 @@ assignin('base','start_time',start_time);
 assignin('base','markers',markers);
 assignin('base','event_type',event_type);
 assignin('base','color',color);
-%}
+%
 %% Selecting Raw Data for Heart Rate Variability Measures
 %{
 if(strcmp(name,'Participant'))
