@@ -60,8 +60,8 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
         %Declare oneEuro object
         a = oneEuro;
         %Alter filter parameters to tune
-        a.mincutoff = 100.0;
-        a.beta = 4.0;
+        a.mincutoff = 100.0; %decrease this to get rid of slow speed jitter
+        a.beta = 4.0; %increase this to get rid of high speed lag
     noisySignal = sc_struct.avg;
     filteredSignal = zeros(size(noisySignal));
     for i = 1:length(noisySignal)
@@ -70,7 +70,7 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     sc_struct.avg = filteredSignal;
     %sc_struct.avg = moving_average(sc_struct.avg,15)';
     %(HR) Apply Cubic Smoothing Spline function
-    p = 0.001;
+    p = 0.01; %smoothing parameter, [0,1]. decrease this for more smoothing
     hr_struct.time_clean = (hr_struct.time-app.start_time)/1000;
     hr_struct.avg = csaps(hr_struct.time_clean,hr_struct.avg,p,hr_struct.time_clean); 
     %(TEMP) Apply Exponential Decay filter
@@ -115,7 +115,7 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
        % An event is tagged if there is a given change in a 10 second interval (default about 0.1 microsemens)
        offset = 10/0.5;
        for i = 1:(size(sc_struct.time,1)-offset)
-           eda_change = abs(sc_struct.avg(i+offset,1) - sc_struct.avg(i,1)) ;
+           eda_change =(sc_struct.avg(i+offset,1) - sc_struct.avg(i,1)) ;
            if(eda_change > curr_thresh.eda && ~ismember(sc_struct.time(i,1),bad_time))
                events.eda.time = [events.eda.time; (sc_struct.time(floor(i+offset/2),1)-app.start_time)/1000];
                events.eda.diff = [events.eda.diff; eda_change/curr_thresh.eda];
