@@ -1,9 +1,9 @@
-function[y] = exp_decay(file,alpha)
+function[avg_data] = exp_decay(data,alpha)
 %Exponential decay smoothing filter
 %increase alpha for more filtering: uses more past data to compute an
 %average
-y = file;
-for i = 1:(length(file)-1)
-    file(i+1)=(file(i)*alpha) + (file(i+1)*(1-alpha));
-    y(i,1)=file(i+1);
+avg_data = data;
+for i = 1:(length(data)-1)
+    data(i+1)=(data(i)*alpha) + (data(i+1)*(1-alpha));
+    avg_data(i,1)=data(i+1);
 end 
