@@ -1,11 +1,11 @@
-function[y] = moving_average(file,windowsize)
+function [avg_data] = moving_average(data,win_size)
 filteredpoint = 0;
 
-for n = windowsize:length(file)
-    for j = 0:(windowsize - 1)
-        filteredpoint = filteredpoint + file(n - j);
+for n = win_size:length(data)
+    for j = 0:(win_size - 1)
+        filteredpoint = filteredpoint + data(n - j);
     end
-    y(n) = filteredpoint / windowsize;
+    avg_data(n) = filteredpoint / win_size;
     filteredpoint = 0;
 end
 

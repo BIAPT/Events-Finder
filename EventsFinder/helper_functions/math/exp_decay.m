@@ -1,4 +1,4 @@
-function[avg_data] = exp_decay(data,alpha)
+function [avg_data] = exp_decay(data,alpha)
 %Exponential decay smoothing filter
 %increase alpha for more filtering: uses more past data to compute an
 %average
