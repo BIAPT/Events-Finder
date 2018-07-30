@@ -14,20 +14,14 @@ function [bvp_struct,sc_struct,temp_struct] = get_sqi(app,type)
 
     %% Selecting data from Participant or Care-giver
     if(strcmp(type,"p"))
-        bvp = app.BVP_p;
-        temp = app.TEMP_p;
-        eda = app.EDA_p;
+        bvp_mat = app.Data.p.bvp.raw;
+        temp_mat = app.Data.p.temp.raw;
+        eda_mat = app.Data.p.sc.raw;
     else
-        bvp = app.BVP_c;
-        temp = app.TEMP_c;
-        eda = app.EDA_c;
+        bvp_mat = app.Data.c.bvp.raw;
+        temp_mat = app.Data.c.temp.raw;
+        eda_mat = app.Data.c.sc.raw;
     end
-
-    %% Converting table into a matrix
-    bvp_mat = str2double(bvp{1:end,2});
-    temp_mat = str2double(temp{1:end,2});
-    eda_mat = str2double(eda{1:end,2});
-    
     
     %% Getting the Signal quality index
     [bvp_struct,sc_struct,temp_struct] = comp_SQI_3(bvp_mat,eda_mat,temp_mat);

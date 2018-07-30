@@ -5,6 +5,12 @@ function load_data_struct(app)
 
     disp('Starting Converting...');
     %% Process Tables into Raw (first column = systime, second = raw)
+    % BVP
+    disp('Converting BVP data...');
+    app.Data.p.bvp.systime = str2double(app.BVP_p{:,1}); 
+    app.Data.c.bvp.systime = str2double(app.BVP_c{:,1});
+    app.Data.p.bvp.raw = str2double(app.BVP_p{:,2});
+    app.Data.c.bvp.raw = str2double(app.BVP_c{:,2});
     % HR
     disp('Converting HR data...');
     app.Data.p.hr.systime = str2double(app.HR_p{:,1}); 
