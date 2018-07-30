@@ -18,5 +18,7 @@ function end_time = get_end_time(app,type)%(hr_table,temp_table,eda_table)
     end
 
     end_time = max([hr_end,temp_end,eda_end]);
+    %end_time = app.start_time - max([hr_end,temp_end,eda_end]); Use this
+    %when we are done TODO!
 end
 

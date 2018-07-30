@@ -29,32 +29,39 @@ function [averaged_array,time_array,bad_time_array,averaged_sqi] = win_average(a
 
     %% Selecting Data from Participant or Care-giver 
     if(strcmp(type,"p"))
-        hr = app.HR_p;
-        temp = app.TEMP_p;
-        eda = app.EDA_p;
+        hr = app.Data.p.hr.raw;
+        hr_time = app.Data.p.hr.systime;
+        temp = app.Data.p.temp.raw;
+        temp_time = app.Data.p.temp.systime;
+        sc = app.Data.p.sc.raw;
+        sc_time = app.Data.p.sc.systime;        
         sqi_temp = app.SQI_TEMP_p;
-        sqi_eda = app.SQI_EDA_p;
+        sqi_sc = app.SQI_EDA_p;
+        %TODO: Include SQI temp and SQI EDA into the data structure
     else
-        hr = app.HR_c;
-        temp = app.TEMP_c;
-        eda = app.EDA_c;
+        hr = app.Data.c.hr.raw;
+        hr_time = app.Data.c.hr.systime;        
+        temp = app.Data.c.temp.raw;
+        temp_time = app.Data.c.temp.systime;        
+        sc = app.Data.c.sc.raw;
+        sc_time = app.Data.c.sc.systime;  
         sqi_temp = app.SQI_TEMP_c;
-        sqi_eda = app.SQI_EDA_c;
+        sqi_sc = app.SQI_EDA_c;
     end
 
     %% Selecting Data from Right Modality
     if(strcmp(mod,'hr'))
-        time = hr{1:end,1};
-        data = hr{1:end,2};
+        time = hr_time;
+        data = hr;
     elseif(strcmp(mod,'temp'))
-        time = temp{1:end,1};
-        data = temp{1:end,2};
+        time = temp_time;
+        data = temp;
         sqi = sqi_temp;
         sqi_threshold = mean(sqi)-std(sqi);
     elseif(strcmp(mod,'eda'))
-        time = eda{1:end,1};
-        data = eda{1:end,2};
-        sqi = sqi_eda;
+        time = sc_time;
+        data = sc;
+        sqi = sqi_sc;
         sqi_threshold = mean(sqi)-std(sqi); 
     end
 
