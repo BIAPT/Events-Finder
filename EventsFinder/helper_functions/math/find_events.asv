@@ -18,8 +18,6 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     hr_struct = struct();
     hr_struct.time = [];
     hr_struct.avg = [];
-    hr_struct.raw_time = app.Data.p.hr.corr_time;
-    hr_struct.raw = app.Data.p.hr.raw;
 
     temp_struct = struct();
     temp_struct.time = [];
@@ -53,17 +51,17 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     
     %% Average the Signals
     % Get the averaged values for each data type
-    [hr_struct.avg,hr_struct.time,~,~] = win_average(app,type,'hr',win_size,end_time);
-    [temp_struct.avg,temp_struct.time,bad_temp_time,temp_struct.avg_sqi] = win_average(app,type,'temp',win_size,end_time);
+    [hr_struct.avg,hr_struct.time,bad_hr_struct.time,~] = win_average(app,type,'hr',win_size,end_time);
+    [temp_struct.avg,temp_struct.time,bad_temp_struct.time,temp_struct.avg_sqi] = win_average(app,type,'temp',win_size,end_time);
     [sc_struct.avg,sc_struct.time,bad_sc_time,sc_struct.avg_sqi] = win_average(app,type,'eda',win_size,end_time);
 
     %% Filtering the Signals
     %(EDA) Apply oneEuro filter
-    %Declare oneEuro object
-    a = oneEuro;
-    %Alter filter parameters to tune
-    a.mincutoff = 100.0; %decrease this to get rid of slow speed jitter
-    a.beta = 4.0; %increase this to get rid of high speed lag
+        %Declare oneEuro object
+        a = oneEuro;
+        %Alter filter parameters to tune
+        a.mincutoff = 100.0; %decrease this to get rid of slow speed jitter
+        a.beta = 4.0; %increase this to get rid of high speed lag
     noisySignal = sc_struct.avg;
     filteredSignal = zeros(size(noisySignal));
     for i = 1:length(noisySignal)
@@ -81,7 +79,7 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
 
     %% Find Bad Time Points
     % Concatenate the bad times for TEMP and EDA and take only the non redondant ones
-    bad_time = unique([bad_temp_time;bad_sc_time]);
+    bad_time = unique([bad_temp_struct.time;bad_sc_time]);
 
     %% (HR) Events Detection
      if(app.HRCheckBox.Value == 1)
@@ -150,13 +148,14 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
         %Find differences
         temp_change = temp_prom-curr_thresh.temp;
         events.temp.diff = [events.temp.diff; temp_change];
+        %Convert time to seconds
+        events.temp.time = (events.temp.time-app.start_time)/1000;
     end
     
     %% Log the All Events
     if(app.is_debug == 0)
         log_events(app,events,type);
     end
-    
     %% Events Filtering
     % Here we select only the most salient events
     % The number of markers are given by app.NumberofMarkersEditField.Value

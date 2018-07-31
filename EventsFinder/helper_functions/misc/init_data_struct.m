@@ -6,11 +6,13 @@ function init_data_struct(app)
     %% Create the basic data structure
     mod_struct = struct();
     mod_struct.raw = [];
+    mod_struct.avg = [];
     mod_struct.systime = [];
     mod_struct.corr_time = [];
     mod_struct.filt = [];
     mod_struct.corr_time_filt = [];
     mod_struct.sqi = [];
+    mod_struct.bad_time = [];
 
     %% Create the user structure
     user_struct = struct();

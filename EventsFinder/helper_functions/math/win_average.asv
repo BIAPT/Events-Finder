@@ -29,21 +29,21 @@ function [averaged_array,time_array,bad_time_array,averaged_sqi] = win_average(a
     %% Selecting Data from Participant or Care-giver 
     if(strcmp(type,"p"))
         hr = app.Data.p.hr.raw;
-        hr_time = app.Data.p.hr.corr_time;
+        hr_time = app.Data.p.hr.systime;
         temp = app.Data.p.temp.raw;
-        temp_time = app.Data.p.temp.corr_time;
+        temp_time = app.Data.p.temp.systime;
         sc = app.Data.p.sc.raw;
-        sc_time = app.Data.p.sc.corr_time;        
+        sc_time = app.Data.p.sc.systime;        
         sqi_temp = app.SQI_TEMP_p;
         sqi_sc = app.SQI_EDA_p;
         %TODO: Include SQI temp and SQI EDA into the data structure
     else
         hr = app.Data.c.hr.raw;
-        hr_time = app.Data.c.hr.corr_time;        
+        hr_time = app.Data.c.hr.systime;        
         temp = app.Data.c.temp.raw;
-        temp_time = app.Data.c.temp.corr_time;        
+        temp_time = app.Data.c.temp.systime;        
         sc = app.Data.c.sc.raw;
-        sc_time = app.Data.c.sc.corr_time;  
+        sc_time = app.Data.c.sc.systime;  
         sqi_temp = app.SQI_TEMP_c;
         sqi_sc = app.SQI_EDA_c;
     end
@@ -90,7 +90,7 @@ function [averaged_array,time_array,bad_time_array,averaged_sqi] = win_average(a
                 isBadTime = 1;
             end
             current_index = current_index + 1;
-            current_time = time(current_index,1);
+            current_time = time(current_index,1));
         end
 
         % If we averaged something within this window we add to the averaged
@@ -103,7 +103,6 @@ function [averaged_array,time_array,bad_time_array,averaged_sqi] = win_average(a
             if(~strcmp(mod,'hr'))
                 averaged_sqi(arr_ind) = min(total_sqi);
             end
-            
             if(isBadTime)
                 bad_time_array(bad_arr_ind,1) = time_array(arr_ind,1);
                 bad_arr_ind = bad_arr_ind + 1;
