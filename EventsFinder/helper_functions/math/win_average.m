@@ -34,9 +34,8 @@ function [averaged_array,time_array,bad_time_array,averaged_sqi] = win_average(a
         temp_time = app.Data.p.temp.corr_time;
         sc = app.Data.p.sc.raw;
         sc_time = app.Data.p.sc.corr_time;        
-        sqi_temp = app.SQI_TEMP_p;
-        sqi_sc = app.SQI_EDA_p;
-        %TODO: Include SQI temp and SQI EDA into the data structure
+        sqi_temp = app.Data.c.temp.sqi;
+        sqi_sc = app.Data.p.sc.sqi;
     else
         hr = app.Data.c.hr.raw;
         hr_time = app.Data.c.hr.corr_time;        
@@ -44,8 +43,8 @@ function [averaged_array,time_array,bad_time_array,averaged_sqi] = win_average(a
         temp_time = app.Data.c.temp.corr_time;        
         sc = app.Data.c.sc.raw;
         sc_time = app.Data.c.sc.corr_time;  
-        sqi_temp = app.SQI_TEMP_c;
-        sqi_sc = app.SQI_EDA_c;
+        sqi_temp = app.Data.c.temp.sqi;
+        sqi_sc = app.Data.c.sc.sqi;
     end
 
     %% Selecting Data from Right Modality
