@@ -18,9 +18,13 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     hr_struct = struct();
     hr_struct.time = [];
     hr_struct.avg = [];
-    hr_struct.raw_time = app.Data.p.hr.corr_time;
-    hr_struct.raw = app.Data.p.hr.raw;
-
+    if(strcmp(type,'p'))
+        hr_struct.raw_time = app.Data.p.hr.corr_time;
+        hr_struct.raw = app.Data.p.hr.raw;
+    else
+        hr_struct.raw_time = app.Data.c.hr.corr_time;
+        hr_struct.raw = app.Data.c.hr.raw;
+    end
     temp_struct = struct();
     temp_struct.time = [];
     temp_struct.avg = [];
@@ -106,6 +110,18 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     
     %(TEMP) Apply Exponential Decay filter
     temp_struct.avg = exp_decay(temp_struct.avg,0.80);
+    
+    %% Put Filtered signal inside the Data structure
+    if(strcmp(type,'p'))
+        app.Data.p.sc.filt = sc_struct.avg;
+        app.Data.p.hr.filt = hr_struct.avg;
+        app.Data.p.temp.filt = temp_struct.avg;
+    else
+        app.Data.c.sc.filt = sc_struct.avg;
+        app.Data.c.hr.filt = hr_struct.avg;
+        app.Data.c.temp.filt = temp_struct.avg;        
+    end
+    
 
     %% Find Bad Time Points
     % Concatenate the bad times for TEMP and EDA and take only the non redondant ones
@@ -294,5 +310,13 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     % Update the data in the structure
     event_struct.events = sort(event_struct.events);
     event_struct.type = sorted_type(:,2);
+    
+    
+    %% Put Events inside the Data structure
+    if(strcmp(type,'p'))
+        app.Data.p.event = event_struct;
+    else
+        app.Data.c.event = event_struct;        
+    end
 end
 

@@ -9,13 +9,18 @@ function init_data_struct(app)
     mod_struct.avg = [];
     mod_struct.systime = [];
     mod_struct.corr_time = [];
-    mod_struct.avg_corr_time = [];
+    mod_struct.avg_time = [];
     mod_struct.filt = [];
-    mod_struct.corr_time_filt = [];
+    
     mod_struct.sqi = [];
     mod_struct.avg_sqi = [];
     mod_struct.score = -1;
     mod_struct.bad_time = [];
+    
+    %% Create the event struct
+    event_struct = struct();
+    event_struct.events = [];
+    event_struct.type = [];
 
     %% Create the user structure
     user_struct = struct();
@@ -23,6 +28,7 @@ function init_data_struct(app)
     user_struct.sc = mod_struct;
     user_struct.temp = mod_struct;
     user_struct.bvp = mod_struct;
+    user_struct.event = event_struct;
 
     %% Update the Data structure
     app.Data.p = struct();
