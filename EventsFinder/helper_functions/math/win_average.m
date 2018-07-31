@@ -111,4 +111,6 @@ function [averaged_array,time_array,bad_time_array,averaged_sqi] = win_average(a
         end
     end
     
+    
+    
 end

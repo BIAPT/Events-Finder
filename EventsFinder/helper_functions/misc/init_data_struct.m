@@ -9,9 +9,11 @@ function init_data_struct(app)
     mod_struct.avg = [];
     mod_struct.systime = [];
     mod_struct.corr_time = [];
+    mod_struct.avg_corr_time = [];
     mod_struct.filt = [];
     mod_struct.corr_time_filt = [];
     mod_struct.sqi = [];
+    mod_struct.avg_sqi = [];
     mod_struct.score = -1;
     mod_struct.bad_time = [];
 

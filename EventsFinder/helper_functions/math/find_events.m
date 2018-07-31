@@ -56,7 +56,35 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     [hr_struct.avg,hr_struct.time,~,~] = win_average(app,type,'hr',win_size,end_time);
     [temp_struct.avg,temp_struct.time,bad_temp_time,temp_struct.avg_sqi] = win_average(app,type,'temp',win_size,end_time);
     [sc_struct.avg,sc_struct.time,bad_sc_time,sc_struct.avg_sqi] = win_average(app,type,'eda',win_size,end_time);
-
+    
+    if(strcmp(type,'p'))
+        app.Data.p.hr.avg = hr_struct.avg;
+        app.Data.p.hr.avg_time = hr_struct.time;
+        
+        app.Data.p.temp.avg = temp_struct.avg;
+        app.Data.p.temp.avg_time = temp_struct.time;
+        app.Data.p.temp.bad_time = bad_temp_time;
+        app.Data.p.temp.avg_sqi = temp_struct.avg_sqi;
+        
+        app.Data.p.sc.avg = sc_struct.avg;
+        app.Data.p.sc.avg_time = sc_struct.time;
+        app.Data.p.sc.bad_time = bad_sc_time;
+        app.Data.p.sc.avg_sqi = sc_struct.avg_sqi;
+    else
+        app.Data.c.hr.avg = hr_struct.avg;
+        app.Data.c.hr.avg_time = hr_struct.time;
+        
+        app.Data.c.temp.avg = temp_struct.avg;
+        app.Data.c.temp.avg_time = temp_struct.time;
+        app.Data.c.temp.bad_time = bad_temp_time;
+        app.Data.c.temp.avg_sqi = temp_struct.avg_sqi;
+        
+        app.Data.c.sc.avg = sc_struct.avg;
+        app.Data.c.sc.avg_time = sc_struct.time;
+        app.Data.c.sc.bad_time = bad_sc_time;
+        app.Data.c.sc.avg_sqi = sc_struct.avg_sqi;        
+    end
+    
     %% Filtering the Signals
     %(EDA) Apply oneEuro filter
     %Declare oneEuro object
