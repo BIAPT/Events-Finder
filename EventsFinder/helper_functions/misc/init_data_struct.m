@@ -12,6 +12,7 @@ function init_data_struct(app)
     mod_struct.filt = [];
     mod_struct.corr_time_filt = [];
     mod_struct.sqi = [];
+    mod_struct.score = -1;
     mod_struct.bad_time = [];
 
     %% Create the user structure
