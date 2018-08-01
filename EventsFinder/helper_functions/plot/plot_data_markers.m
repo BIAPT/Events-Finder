@@ -133,7 +133,7 @@ hold on
 plot(temp.time,temp.avg,color);
 plot(temp.time,temp.avg_sqi,'color',[153/255 153/255 255/255]);
 if (~isempty(temp_markers)) %insert event_struct.events from app
-   (scatter(temp_marker_times,temp_marker_values,30,RGB,'*')); 
+   (scatter(temp_marker_times,temp_marker_values,30,color,'*')); 
 end
 grid on
 hold off
