@@ -14,7 +14,7 @@ function plot_data_markers(name,hrv_features_struct,sc,hr,temp,event_struct,colo
 %   SQI: drag down to view sqi (purple line) above graph for sc and temp. 
 %       Ranges from n to n+1 where the values closest to n+1 are
 %       greater in signal quality.
-%   Events: navy blue asterisks
+%   Events: asterisks
 
 %% HRV sorting
 times_hiHRV = [];
@@ -82,7 +82,6 @@ temp_marker_values = temp.avg(data_3); %y value corresponding to exact time
 disp('Plotting data subplots');
 title = strcat(name,' Physiological Data'); 
 figure('Name',title)
-RGB = [27/255 0/255 135/255]; %marker color
 
 sc_subplot = subplot(3,1,1);
 %Modify SQI
@@ -92,7 +91,7 @@ hold on
 plot(sc.time,sc.avg,color);
 plot(sc.time,sc.avg_sqi,'color',[153/255 153/255 255/255]);
 if (~isempty(sc_markers)) %insert event_struct.events from events app
-    (scatter(sc_marker_times,sc_marker_values,30,RGB,'*')); 
+    (scatter(sc_marker_times,sc_marker_values,30,color,'*')); 
 end
 grid on
 hold off
@@ -109,7 +108,7 @@ plot(hr.raw_time,hr.raw,'color',[160/255 160/255 160/255])
 plot(hr.time,hr.avg,color)
 grid on
 if (~isempty(hr_markers)) %insert event_struct.events from events app
-    (scatter(hr_marker_times,hr_marker_values,30,RGB,'*'));
+    (scatter(hr_marker_times,hr_marker_values,30,color,'*'));
 end 
 if ~isempty(times_hiHRV)
     vline(times_hiHRV,'g')
