@@ -31,11 +31,11 @@ function [hrv_features_struct] = calc_hrv_features(app,type,window_size)
     
     %% Selecting Data
     if(strcmp(type,"p"))
-        hr = app.Data.p.hr.raw;
-        time = app.Data.p.hr.corr_time;
+        hr = app.Data.p.hr.avg;
+        time = app.Data.p.hr.avg_time;
     else
-        hr = app.Data.c.hr.raw;
-        time = app.Data.c.hr.corr_time;
+        hr = app.Data.c.hr.avg;
+        time = app.Data.c.hr.avg_time;
     end
     
     RR_intervals = (60./hr); % To get RR in seconds

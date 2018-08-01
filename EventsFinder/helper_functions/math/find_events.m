@@ -109,7 +109,7 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     hr_struct.avg = csaps(hr_struct.time,hr_struct.avg,p,hr_struct.time); 
     
     %(TEMP) Apply Exponential Decay filter
-    temp_struct.avg = exp_decay(temp_struct.avg,0.80);
+    temp_struct.avg = exp_decay(temp_struct.avg,0.95);
     
     %% Put Filtered signal inside the Data structure
     if(strcmp(type,'p'))
