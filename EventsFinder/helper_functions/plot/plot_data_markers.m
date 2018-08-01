@@ -21,10 +21,10 @@ times_hiHRV = [];
 times_loHRV = [];
 times_midHRV = [];
 
-for i = 1:length(test.pRR20)
-    if (test.pRR20(i) >= 0.7)
+for i = 1:length(hrv_features_struct.pRR20)
+    if (hrv_features_struct.pRR20(i) >= 0.7)
      times_hiHRV = [times_hiHRV,hrv_features_struct.time(i)];
-    elseif (test.pRR20(i) <= 0.2)
+    elseif (hrv_features_struct.pRR20(i) <= 0.2)
      times_loHRV = [times_loHRV,hrv_features_struct.time(i)];
     else
         times_midHRV = [times_midHRV,hrv_features_struct.time(i)];
