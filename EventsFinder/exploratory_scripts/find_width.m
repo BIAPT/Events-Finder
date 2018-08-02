@@ -1,10 +1,12 @@
+function [width] = find_width(diff,zero_cross_pts)
+%{
 %% Input (Example of inputs)
 diff = 1:1000;
 zero_cross_pts = 45;
 
 %% Output (This is the output)
-width = 0;
-
+width = 1;
+%}
 %% Variables
 left_border = zero_cross_pts - 1;
 right_border = zero_cross_pts + 1;

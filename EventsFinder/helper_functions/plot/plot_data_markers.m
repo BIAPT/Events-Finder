@@ -111,7 +111,7 @@ if (~isempty(hr_markers)) %insert event_struct.events from events app
     (scatter(hr_marker_times,hr_marker_values,30,color,'*'));
 end 
 if ~isempty(times_hiHRV)
-    vline(times_hiHRV,'g')
+    vline(times_hiHRV,'m')
 end
 if ~isempty(times_loHRV)
     vline(times_loHRV,'y')
