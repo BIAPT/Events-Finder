@@ -94,7 +94,7 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     %Declare oneEuro object
     a = oneEuro;
     %Alter filter parameters to tune
-    a.mincutoff = 100.0; %decrease this to get rid of slow speed jitter
+    a.mincutoff = 50.0; %decrease this to get rid of slow speed jitter
     a.beta = 4.0; %increase this to get rid of high speed lag
     noisySignal = sc_struct.avg;
     filteredSignal = zeros(size(noisySignal));
@@ -102,8 +102,7 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
         filteredSignal(i) = a.filter(noisySignal(i),i);
     end
     sc_struct.avg = filteredSignal;
-    %sc_struct.avg = moving_average(sc_struct.avg,15)';
-    
+ 
     %(HR) Apply Cubic Smoothing Spline function
     p = 0.01; %smoothing parameter, [0,1]. decrease this for more smoothing
     hr_struct.avg = csaps(hr_struct.time,hr_struct.avg,p,hr_struct.time); 
@@ -170,6 +169,7 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     
     %% (TEMP) Events Detection
     if(app.TempCheckBox.Value == 1)
+        %{
         % An event is tagged if there is a prominent peak (default 0.1 degree)
         [temp_peak_val,temp_peak_idx,~,temp_peak_prom] = findpeaks(temp_struct.avg,'MinPeakProminence',curr_thresh.temp); 
         temp_peak_time = temp_struct.time(temp_peak_idx);
@@ -195,6 +195,17 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
         temp_change = temp_prom-curr_thresh.temp;
         events.temp.diff = [events.temp.diff; temp_change];
     end
+        %}
+          % An event is tagged if there is a given change in a 15 second interval (default about 0.1 microsemens)
+       offset = 15/0.5;
+       for i = 1:(size(temp_struct.time,1)-offset)
+           temp_change = abs((temp_struct.avg(i+offset,1)) - (temp_struct.avg(i,1))) ;
+           if(temp_change > curr_thresh.temp && ~ismember(temp_struct.time(i,1),bad_time))
+               events.temp.time = [events.temp.time; temp_struct.time(floor(i+offset/2),1)];
+               events.temp.diff = [events.temp.diff; temp_change/curr_thresh.temp];
+           end
+       end
+    end   
     
     %% Log the All Events
     if(app.is_debug == 0)
@@ -208,7 +219,7 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     % Setting up variables
     % Window size to allow for two consecutive events
     EDA_win = 10;
-    TEMP_win = 25;
+    TEMP_win = 30;
     HR_win = 10;
     % Current index
     i = 1;
@@ -305,13 +316,14 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     % Here we sort the data in increasing order of time
     % We save the types and we return the events
     % Create our sort matrix
+    if ~isempty(event_struct.events)
     sort_matrix = [event_struct.events,event_struct.type];
     sorted_type = sortrows(sort_matrix,1);
     % Update the data in the structure
     event_struct.events = sort(event_struct.events);
     event_struct.type = sorted_type(:,2);
-    
-    
+    end
+   
     %% Put Events inside the Data structure
     if(strcmp(type,'p'))
         app.Data.p.event = event_struct;

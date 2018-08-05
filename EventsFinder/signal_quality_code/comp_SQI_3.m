@@ -40,7 +40,7 @@ data_in.bvp= bvp_original;
 
 % Skin conductance signal %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 data_sc_orignial = skin_conductance;
-%filter with mdeian filter and derrivative correction
+%filter with median filter and derivative correction
 data_in.sc = medfilt1(data_sc_orignial,15);
 data_in.sc_temp=data_in.sc;
 derr = diff(data_in.sc_temp);
@@ -68,7 +68,7 @@ temp_sqi= ones(1, length(data_in.skt));
 temp_sqi=temp_sqi';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% set up FFT values and claculate fft for data
+%% set up FFT values and calculate fft for data
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 L = length(data_in.bvp);             % Length of signal
 Fs = 75;            % Sampling frequency                    
