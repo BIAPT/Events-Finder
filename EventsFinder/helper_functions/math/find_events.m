@@ -233,6 +233,9 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
         max_eda= max_eda*curr_thresh.eda_sf;
         max_hr= max_hr*curr_thresh.hr_sf;
         max_temp= max_temp*curr_thresh.temp_sf;
+        disp(max_eda)
+        disp(max_hr)
+        disp(max_temp)
 
         % If one of the data type was empty replace with a -1
         if(isempty(max_eda))
@@ -246,7 +249,7 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
         end
         
         % If all of them are empty we just break out
-        if(max_temp <= -1 && max_hr <= -1 && max_eda <= -1)
+        if(max_temp <= 0 && max_hr <= 0 && max_eda <= 0)
             display('No more significant events')
             break;
         end

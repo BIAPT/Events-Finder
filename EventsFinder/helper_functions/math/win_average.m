@@ -34,7 +34,7 @@ function [averaged_array,time_array,bad_time_array,averaged_sqi] = win_average(a
         temp_time = app.Data.p.temp.corr_time;
         sc = app.Data.p.sc.raw;
         sc_time = app.Data.p.sc.corr_time;        
-        sqi_temp = app.Data.c.temp.sqi;
+        sqi_temp = app.Data.p.temp.sqi;
         sqi_sc = app.Data.p.sc.sqi;
     else
         hr = app.Data.c.hr.raw;

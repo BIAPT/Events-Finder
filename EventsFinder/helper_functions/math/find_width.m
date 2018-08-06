@@ -15,7 +15,6 @@ left_sign = sign(diff(left_border));
 right_sign = sign(diff(right_border));
 
 %% Algorithm
-
 while(left_border > 0 && right_border < size(diff,1) ...
         && left_sign == sign(diff(left_border)) && right_sign == sign(diff(right_border)))
     
