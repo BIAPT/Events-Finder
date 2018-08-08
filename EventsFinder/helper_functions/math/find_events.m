@@ -156,8 +156,8 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     
     %% (SC) Events Detection
     if(app.EDACheckBox.Value == 1)
-       % An event is tagged if there is a given change in a 10 second interval (default about 0.1 microsemens)
-       offset = 10/0.5;
+       % An event is tagged if there is a given change in a chosen second interval (default about 0.1 microsemens)
+       offset = curr_thresh.eda_int/0.5;
        for i = 1:(size(sc_struct.time,1)-offset)
            eda_change =(sc_struct.avg(i+offset,1) - sc_struct.avg(i,1)) ;
            if(eda_change > curr_thresh.eda && ~ismember(sc_struct.time(i,1),bad_time))
@@ -196,8 +196,8 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
         events.temp.diff = [events.temp.diff; temp_change];
     end
         %}
-          % An event is tagged if there is a given change in a 15 second interval (default about 0.1 microsemens)
-       offset = 15/0.5;
+          % An event is tagged if there is a change in a chosen second interval (default about 0.1 microsemens)
+       offset = curr_thresh.temp_int/0.5;
        for i = 1:(size(temp_struct.time,1)-offset)
            temp_change = abs((temp_struct.avg(i+offset,1)) - (temp_struct.avg(i,1))) ;
            if(temp_change > curr_thresh.temp && ~ismember(temp_struct.time(i,1),bad_time))

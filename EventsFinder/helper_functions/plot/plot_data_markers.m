@@ -98,7 +98,7 @@ hold off
 %Axis Properties
 ylim([1 4]);
 ylabel('EDA');
-xticks(0:100:2700);
+xticks(0:100:3000);
 xtickangle(45);
 
 hr_subplot = subplot(3,1,2);
@@ -122,7 +122,7 @@ end
 hold off
 %Axis Properties
 ylabel('HR'); 
-xticks(0:100:2700);
+xticks(0:100:3000);
 xtickangle(45);
 
 temp_subplot = subplot(3,1,3); 
@@ -141,7 +141,7 @@ hold off
 xlabel('Time(s)');
 ylabel('Temp(C)'); 
 ylim([34 36]);
-xticks(0:100:2700);
+xticks(0:100:3000);
 xtickangle(45);
 
 %Additional Axis Properties
