@@ -40,7 +40,7 @@ data_in.bvp= bvp_original;
 % Skin conductance signal %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 data_sc_original = skin_conductance;
 %filter with median filter and derivative correction
-data_in.sc = medfilt1(data_sc_original,15); %increase from 15
+data_in.sc = medfilt1(data_sc_original,75); %increase from 15
 data_in.sc_temp=data_in.sc;
 derr = diff(data_in.sc_temp);
 z_der=zscore(derr);
