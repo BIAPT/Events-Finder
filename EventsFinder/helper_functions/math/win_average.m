@@ -30,18 +30,18 @@ function [averaged_array,time_array,bad_time_array,averaged_sqi] = win_average(a
     if(strcmp(type,"p"))
         hr = app.Data.p.hr.raw;
         hr_time = app.Data.p.hr.corr_time;
-        temp = app.Data.p.temp.raw;
+        temp = app.Data.p.temp.filt;
         temp_time = app.Data.p.temp.corr_time;
-        sc = app.Data.p.sc.raw;
+        sc = app.Data.p.sc.filt;
         sc_time = app.Data.p.sc.corr_time;        
         sqi_temp = app.Data.p.temp.sqi;
         sqi_sc = app.Data.p.sc.sqi;
     else
         hr = app.Data.c.hr.raw;
         hr_time = app.Data.c.hr.corr_time;        
-        temp = app.Data.c.temp.raw;
+        temp = app.Data.c.temp.filt;
         temp_time = app.Data.c.temp.corr_time;        
-        sc = app.Data.c.sc.raw;
+        sc = app.Data.c.sc.filt;
         sc_time = app.Data.c.sc.corr_time;  
         sqi_temp = app.Data.c.temp.sqi;
         sqi_sc = app.Data.c.sc.sqi;
