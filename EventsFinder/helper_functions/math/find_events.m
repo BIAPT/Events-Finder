@@ -104,7 +104,7 @@ function [event_struct,hr_struct,temp_struct,sc_struct] = find_events(app,type)
     sc_struct.avg = filteredSignal;
  
     %(HR) Apply Cubic Smoothing Spline function
-    p = 0.01; %smoothing parameter, [0,1]. decrease this for more smoothing
+    p = 0.001; %smoothing parameter, [0,1]. decrease this for more smoothing
     hr_struct.avg = csaps(hr_struct.time,hr_struct.avg,p,hr_struct.time); 
     
     %(TEMP) Apply Exponential Decay filter

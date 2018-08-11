@@ -34,14 +34,13 @@ end
 filt_derr= cat(1,bvp_original(1),derr);
 bvp_original= cumsum(filt_derr);
 
+data_in.bvp= bvp_original;
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 1.1 - Detrending filter
-data_in.bvp= bvp_original;
-
 % Skin conductance signal %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-data_sc_orignial = skin_conductance;
+data_sc_original = skin_conductance;
 %filter with median filter and derivative correction
-data_in.sc = medfilt1(data_sc_orignial,15); %increase from 15
+data_in.sc = medfilt1(data_sc_original,15); %increase from 15
 data_in.sc_temp=data_in.sc;
 derr = diff(data_in.sc_temp);
 z_der=zscore(derr);
@@ -194,13 +193,13 @@ bvp_sqi_new = bvp_sqi_new*ones(length(data_in.bvp),1);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 2- SKIN CONDUCTANCE Signal Quality Index
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-W = 50;
+W = 30;
 L = length(data_in.sc);  
-for l1 = 1:25:L-W+1
+for l1 = 1:15:L-W+1
     l2=l1-1+W;
     dff= std(data_in.sc(l1:l2));
     sc_sqi(l1:l2)=sc_sqi(l1:l2)*exp(-0.1*dff); %change -0.1. more sd, worse the score. 0.1 is scaling factor; more negative is more sensitive
-    if max(abs(diff(data_in.sc(l1:l2)))) > 3 %(org: 3)if max difference between data points is greater than 3. remove steep increases/decreases
+    if max(diff(data_in.sc(l1:l2))) > 3 %(org: 3)if max difference between data points is greater than 3. remove steep increases/decreases
         sc_sqi(l1:l2) = 0.4*sc_sqi(l1:l2);
     end  
  
@@ -218,8 +217,8 @@ if mod(L, 2)~=0
 
 end
 %flatness of line
-W = 50;
-for l1 = 1:20:L-W+1 
+W = 120;
+for l1 = 1:30:L-W+1 
     l2=l1-1+W;
         if max(abs(diff(data_in.sc(l1:l2)))) <= 0.001
             sc_sqi(l1:l2) = 0.1*sc_sqi(l1:l2);
@@ -244,40 +243,40 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 3- SKIN TEMPERATURE Signal Quality Index
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-W = 100;
+W = 50;
 L = length(data_in.skt);  
-for l1 = 1:50:L-W+1 %1:half the window
+for l1 = 1:25:L-W+1 %1:half the window
     l2=l1-1+W;
     dff= std(data_in.skt(l1:l2));
     temp_min = min(data_in.skt(l1:l2));
     temp_maxmin = max(data_in.skt(l1:l2))-min(data_in.skt(l1:l2));
-    temp_sqi(l1:l2)=temp_sqi(l1:l2)*exp(-0.55*dff); %sensitivity to sd
+    temp_sqi(l1:l2)=temp_sqi(l1:l2)*exp(-0.20*dff); %sensitivity to sd
     if temp_min < 15 %temp minimum
-            temp_sqi(l1:l2) = 0.25*temp_sqi(l1:l2); %50%  score
+            temp_sqi(l1:l2) = 0.50*temp_sqi(l1:l2); %50%  score
     end
-    if max(abs(diff(data_in.skt(l1:l2)))) < 0.00001 %flat line penalty
-            temp_sqi(l1:l2) = 0.65*temp_sqi(l1:l2);
+    if max(abs(diff(data_in.skt(l1:l2)))) <= 0.0001 %flat line penalty
+            temp_sqi(l1:l2) = 0.50*temp_sqi(l1:l2);
     end    
-     if abs(temp_maxmin) > 3 %steep increases/falls
-            temp_sqi(l1:l2) = 0.1*temp_sqi(l1:l2);
+     if abs(temp_maxmin) > 4 %steep increases/falls
+            temp_sqi(l1:l2) = 0.3*temp_sqi(l1:l2);
      end
 
 end
 
-if mod(L, 2) ~=0 && L>100
+if mod(L, 2) ~=0 && L>50
    l1=L-W;
    l2=L;
     dff= std(data_in.skt(l1:l2));
     temp_min = min(data_in.skt(l1:l2));
     temp_maxmin = max(data_in.skt(l1:l2))-min(data_in.skt(l1:l2));
-    temp_sqi(l1:l2)=temp_sqi(l1:l2)*exp(-0.5*dff);
+    temp_sqi(l1:l2)=temp_sqi(l1:l2)*exp(-0.20*dff);
         if temp_min < 15
-            temp_sqi(l1:l2) = 0.65*temp_sqi(l1:l2);
+            temp_sqi(l1:l2) = 0.50*temp_sqi(l1:l2);
         end
-        if max(abs(diff(data_in.skt(l1:l2)))) < 0.00001
-            temp_sqi(l1:l2) = 0.25*temp_sqi(l1:l2);
+        if max(abs(diff(data_in.skt(l1:l2)))) < 0.0001
+            temp_sqi(l1:l2) = 0.50*temp_sqi(l1:l2);
         end     
-        if abs(temp_maxmin) > 3
+        if abs(temp_maxmin) > 4
             temp_sqi(l1:l2) = 0.3*temp_sqi(l1:l2);
         end
         
