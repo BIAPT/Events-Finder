@@ -43,9 +43,10 @@ function [hrv_features_struct] = calc_hrv_features(app,type,window_size)
     
     %% Feature calculation
     % Using a window to calculate feature vector
-    for i = 1:window_size:(size(RR_intervals,1)-window_size)
+    for i = 1:(size(RR_intervals,1)-window_size)
         win_hr = RR_intervals(i:i+window_size,1);
         diff_win_hr = diff(win_hr);
+        
         % Average of RR intervals
         hrv_features_struct.mean_RR = [hrv_features_struct.mean_RR; mean(win_hr)];
         % Standard deviation of RR intervals
